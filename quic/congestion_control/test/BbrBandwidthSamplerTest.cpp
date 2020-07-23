@@ -154,15 +154,13 @@ TEST_F(BbrBandwidthSamplerTest, AppLimited) {
   sampler.onPacketAcked(ackEvent, 0);
   EXPECT_FALSE(sampler.isAppLimited());
 
-  std::vector<int> indices =
-      getQLogEventIndices(QLogEventType::AppLimitedUpdate, qLogger);
+  std::vector<int> indices = getQLogEventIndices(QLogEventType::AppLimitedUpdate, qLogger);
   EXPECT_EQ(indices.size(), 2);
-  auto tmp = std::move(qLogger->logs[indices[0]]);
-  auto event = dynamic_cast<QLogAppLimitedUpdateEvent*>(tmp.get());
+ 
+  auto event = qLogger->logs[indices[0]];
   EXPECT_EQ(event->limited, true);
 
-  auto tmp2 = std::move(qLogger->logs[indices[1]]);
-  auto event2 = dynamic_cast<QLogAppLimitedUpdateEvent*>(tmp2.get());
+  auto event2 = qLogger->logs[indices[1]];
   EXPECT_EQ(event2->limited, false);
 }
 
